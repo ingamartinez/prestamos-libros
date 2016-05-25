@@ -2,24 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Libro;
+use App\Model\Prestamo;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use DB;
 
-class LibroController extends Controller
+class PrestamoController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $libros = Libro::all();
+        $prestamos = Prestamo::all();
 
-        return $libros;
+        $prestamos = DB::table('prestamos')
+            ->join('estudiantes', 'estudiantes.id', '=', 'prestamos.estudiantes_id')
+            ->join('libros', 'libros.id', '=', 'prestamos.libros_id')
+            ->select('prestamos.id','libros.titulo', 'estudiantes.nombre')
+        ->get();
 
+
+        
+        return $prestamos;
     }
 
     /**
@@ -40,9 +48,11 @@ class LibroController extends Controller
      */
     public function store(Request $request)
     {
-        $libro = new Libro($request->all());
+        $prestamo = new Prestamo();
+        $prestamo->libros_id = $request->libros_id;
+        $prestamo->estudiantes_id = $request->estudiantes_id;
 
-        $libro->save();
+        $prestamo->save();
     }
 
     /**
@@ -53,8 +63,8 @@ class LibroController extends Controller
      */
     public function show($id)
     {
-        $libro = Libro::findOrFail($id);
-        return $libro;
+        $prestamo = Prestamo::findOrFail($id);
+        return $prestamo;
     }
 
     /**
@@ -77,13 +87,12 @@ class LibroController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $libro = Libro::findOrFail($id);
+        $prestamo = Estudiante::findOrFail($id);
 
-        $libro->titulo= $request->titulo;
-        $libro->autor= $request->autor;
+        $prestamo->libros_id= $request->libros_id;
+        $prestamo->estudiantes_id= $request->estudiantes_id;
 
-
-        $libro->save();
+        $prestamo->save();
     }
 
     /**
@@ -94,6 +103,6 @@ class LibroController extends Controller
      */
     public function destroy($id)
     {
-        Libro::destroy($id);
+        Prestamo::destroy($id);
     }
 }

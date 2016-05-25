@@ -10,9 +10,6 @@ class Estudiante extends Model
 
     protected $fillable = ['nombre','apellido','codigo'];
 
-    public function libro()
-    {
-        return $this->hasMany('App\Model\Libro','estudiantes_id');
-    }
+
     
 }

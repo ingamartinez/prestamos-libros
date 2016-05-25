@@ -17,7 +17,6 @@ class EstudianteController extends Controller
     public function index(Request $request)
     {
         $estudiantes = Estudiante::all();
-
         return $estudiantes;
 
     }
@@ -54,7 +53,7 @@ class EstudianteController extends Controller
     public function show($id)
     {
         $estudiante = Estudiante::findOrFail($id);
-        return $estudiante->libro;
+        return $estudiante;
     }
 
     /**
